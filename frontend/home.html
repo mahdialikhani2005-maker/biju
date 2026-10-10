@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<script src="config.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Bijo - اپلیکیشن آموزش زبان</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4A90E2" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Bijo" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="media/pp.png" />
+    <link rel="apple-touch-icon" href="media/pp.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="assets/icon-512.png" />
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta property="og:title" content="Bijo App" />
+    <meta property="og:description" content="اپلیکیشن آموزش زبان" />
+    <meta property="og:image" content="media/pp.png" />
+</head>
+<body>
+
+    <div class="brand">
+    
+        <div class="brand__name">bijo</div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">یک زبان را انتخاب کنید </h1>
+
+        <div class="languages">
+
+            <a class="lang-card" href="lessons/english/index.html">
+                <img src="assets/en.png" alt="English" />
+                <span>انگلیسی</span>
+            </a>
+
+            <a class="lang-card" href="french/index.html">
+                <img src="assets/fr.png" alt="French" />
+                <span>فرانسوی</span>
+            </a>
+
+            <a class="lang-card" href="spanish/index.html">
+                <img src="assets/es.png" alt="Spanish" />
+                <span>اسپانیایی</span>
+            </a>
+
+            <a class="lang-card" href="german/index.html">
+                <img src="assets/de.png" alt="German" />
+                <span>المانی</span>
+            </a>
+
+            <a class="lang-card" href="italian/index.html">
+                <img src="assets/it.png" alt="Italian" />
+                <span>ایتالیایی</span>
+            </a>
+
+            <a class="lang-card" href="turkish/index.html">
+                <img src="assets/tr.png" alt="Turkish" />
+                <span>ترکی</span>
+            </a>
+
+            <a class="lang-card" href="arabic/index.html">
+                <img src="assets/ar.png" alt="Arabic" />
+                <span>عربی</span>
+            </a>
+
+            <a class="lang-card" href="russian/index.html">
+                <img src="assets/ru.png" alt="Russian" />
+                <span>روسی</span>
+            </a>
+
+            <a class="lang-card" href="japanese/index.html">
+                <img src="assets/ja.png" alt="Japanese" />
+                <span>ژاپنی</span>
+            </a>
+
+            <a class="lang-card" href="korean/index.html">
+                <img src="assets/ko.png" alt="Korean" />
+                <span>کره ای</span>
+            </a>
+
+            <a class="lang-card" href="chinese/index.html">
+                <img src="assets/zh.png" alt="Chinese" />
+                <span>چینی</span>
+            </a>
+
+        </div>
+    </div>
+
+<script src="dataStorage.js"></script>
+<script>
+  // ثبت سرویس ورکر برای PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('Service Worker registered successfully:', registration);
+        })
+        .catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    console.log('App can be installed!');
+  });
+
+  // چک کردن اینکه آیا نسخه‌ی نصب‌شده‌ی اپ خیلی قدیمی شده یا نه
+  window.addEventListener('load', () => {
+    if (window.checkForForcedUpdate) {
+      checkForForcedUpdate();
+    }
+  });
+</script>
+</body>
+</html>

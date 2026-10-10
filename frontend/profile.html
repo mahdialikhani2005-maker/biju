@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<script src="config.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پروفایل</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+font-family:sans-serif;
+background:#f7f7f7;
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding-bottom:64px; /* جا برای نب‌بار ثابت */
+}
+
+.profile-card{
+background:white;
+padding:28px;
+border-radius:18px;
+width:100%;
+max-width:420px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+text-align:center;
+}
+
+.avatar{
+width:80px;
+height:80px;
+border-radius:50%;
+background:#58cc02;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+font-weight:bold;
+margin:0 auto 14px auto;
+}
+
+.username{
+color:#777;
+margin-top:-6px;
+margin-bottom:18px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin-top:20px;
+}
+
+.stat{
+background:#fafafa;
+border-radius:12px;
+padding:14px;
+}
+
+.stat-value{
+font-weight:bold;
+font-size:15px;
+}
+
+.stat-label{
+font-size:12px;
+color:#666;
+}
+
+.premium{
+margin-top:14px;
+font-weight:bold;
+}
+
+.btn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+margin-top:14px;
+}
+
+.btn-premium{
+background:#ffc800;
+}
+
+.btn-logout{
+background:#ff4d4f;
+color:white;
+}
+
+/* نب‌بار مشترک: این استایل رو بعداً می‌تونی ببری تو style.css */
+.bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  z-index: 150;
+}
+.bottom-nav-inner {
+  direction: ltr;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  background: white;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  padding: 10px 0;
+  box-sizing: border-box;
+}
+.bottom-nav .nav-item { opacity: 0.45; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+.bottom-nav .nav-item.active { opacity: 1; }
+.bottom-nav .nav-item img { width: 26px; height: 26px; }
+.bottom-nav .nav-item .nav-icon-emoji { font-size: 22px; }
+
+</style>
+</head>
+
+<body>
+
+<div class="profile-card">
+
+<div class="avatar" id="avatar">?</div>
+
+<h2 id="name">...</h2>
+<div class="username" id="username">@user</div>
+
+<div class="premium" id="premium-status">...</div>
+
+<div class="stats">
+
+<div class="stat">
+<div class="stat-value" id="join-date">---</div>
+<div class="stat-label">تاریخ عضویت</div>
+</div>
+
+<div class="stat">
+<div class="stat-value" id="mobile">---</div>
+<div class="stat-label">موبایل</div>
+</div>
+
+</div>
+
+<button class="btn btn-premium" onclick="goPremium()">
+خرید اشتراک پریمیوم
+</button>
+
+<button class="btn btn-logout" onclick="logout()">
+خروج از حساب
+</button>
+
+</div>
+
+<!-- نب‌بار مشترک: درس | مرور | پیشرفت | پروفایل -->
+<footer class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="#" id="nav-lesson" class="nav-item">
+      <img src="/assets/icons/lesson.png" alt="درس">
+    </a>
+    <a href="#" id="nav-review" class="nav-item">
+      <span class="nav-icon-emoji">🔁</span>
+    </a>
+    <a href="#" id="nav-progress" class="nav-item">
+      <img src="/assets/icons/progress.png" alt="پیشرفت">
+    </a>
+    <a href="#" id="nav-profile" class="nav-item active">
+      <img src="/assets/icons/profile.png" alt="پروفایل">
+    </a>
+  </div>
+</footer>
+
+<script src="courseRouter.js" type="module"></script>
+
+<script>
+
+function loadProfile(){
+    const saved = localStorage.getItem("user");
+    if(!saved){
+        window.location.href="auth.html";
+        return;
+    }
+
+    const user = JSON.parse(saved);
+
+    document.getElementById("name").textContent = user.full_name || "کاربر";
+    document.getElementById("username").textContent = "@" + (user.username || "user");
+    document.getElementById("mobile").textContent = user.phone_number || "---";
+    document.getElementById("avatar").textContent = (user.full_name || user.username || "U").charAt(0).toUpperCase();
+    document.getElementById("premium-status").textContent = user.premium ? "✅ اشتراک پریمیوم فعال" : "کاربر عادی";
+}
+
+function logout(){
+    localStorage.removeItem("user");
+    window.location.href = "auth.html";
+}
+
+function goPremium(){
+    window.location.href = "premium.html";
+}
+
+document.addEventListener("DOMContentLoaded", loadProfile);
+
+</script>
+
+</body>
+</html>

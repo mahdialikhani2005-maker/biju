@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<script src="config.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>خرید اشتراک پریمیوم</title>
+  <style>
+    body { margin:0; font-family:Tahoma,sans-serif; background:#f5f7fb; color:#222; }
+    .container { max-width:900px; margin:0 auto; padding:24px; }
+    .header { text-align:center; margin-bottom:24px; }
+    .header h1 { margin:0 0 10px; font-size:28px; }
+    .header p { margin:0; color:#666; font-size:15px; }
+    .status-box { background:#fff; border-radius:16px; padding:16px; margin-bottom:24px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+    .status-title { font-size:18px; font-weight:bold; margin-bottom:8px; }
+    .plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:18px; }
+    .plan-card { background:#fff; border-radius:18px; padding:20px; box-shadow:0 6px 18px rgba(0,0,0,0.08); border:2px solid transparent; transition:0.2s; }
+    .plan-card:hover { transform:translateY(-4px); border-color:#7c5cff; }
+    .plan-title { font-size:20px; font-weight:bold; margin-bottom:10px; }
+    .plan-duration { font-size:15px; color:#666; margin-bottom:8px; }
+    .plan-price { font-size:22px; font-weight:bold; color:#7c5cff; margin-bottom:14px; }
+    .plan-features { margin:0 0 18px; padding:0 18px 0 0; color:#444; font-size:14px; line-height:1.9; }
+    .buy-btn { width:100%; border:none; border-radius:12px; background:#7c5cff; color:#fff; padding:12px; font-size:15px; cursor:pointer; }
+    .buy-btn:hover { background:#6948f5; }
+    .buy-btn:disabled { background:#ccc; cursor:not-allowed; }
+    .back-link { display:inline-block; margin-top:24px; text-decoration:none; color:#7c5cff; font-weight:bold; }
+    .message { margin-top:18px; padding:12px 14px; border-radius:12px; display:none; font-size:14px; }
+    .message.success { display:block; background:#e9f9ef; color:#18794e; }
+    .message.error { display:block; background:#fdecec; color:#b42318; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>خرید اشتراک پریمیوم</h1>
+      <p>با فعال‌سازی پریمیوم، قلب نامحدود و تجربه بهتر در برنامه داشته باش.</p>
+    </div>
+
+    <div class="status-box">
+      <div class="status-title">وضعیت اشتراک شما</div>
+      <div id="premiumStatusText">در حال بررسی...</div>
+    </div>
+
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-title">اشتراک 1 ماهه</div>
+        <div class="plan-duration">30 روز دسترسی پریمیوم</div>
+        <div class="plan-price">99,000 تومان</div>
+        <ul class="plan-features">
+          <li>قلب کامل و بدون نگرانی</li>
+          <li>استفاده راحت‌تر از تمرین‌ها</li>
+          <li>فعال‌سازی فوری پس از خرید</li>
+        </ul>
+        <button class="buy-btn" onclick="handleBuy('premium_30d')">خرید اشتراک</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-title">اشتراک 3 ماهه</div>
+        <div class="plan-duration">90 روز دسترسی پریمیوم</div>
+        <div class="plan-price">249,000 تومان</div>
+        <ul class="plan-features">
+          <li>مناسب برای استفاده بلندمدت</li>
+          <li>قلب نامحدود در کل دوره</li>
+          <li>به‌صرفه‌تر از ماهانه</li>
+        </ul>
+        <button class="buy-btn" onclick="handleBuy('premium_90d')">خرید اشتراک</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-title">اشتراک 6 ماهه</div>
+        <div class="plan-duration">180 روز دسترسی پریمیوم</div>
+        <div class="plan-price">449,000 تومان</div>
+        <ul class="plan-features">
+          <li>مناسب برای یادگیری پیوسته</li>
+          <li>دسترسی طولانی‌تر به امکانات ویژه</li>
+          <li>ارزش خرید بالاتر</li>
+        </ul>
+        <button class="buy-btn" onclick="handleBuy('premium_180d')">خرید اشتراک</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-title">اشتراک 1 ساله</div>
+        <div class="plan-duration">365 روز دسترسی پریمیوم</div>
+        <div class="plan-price">799,000 تومان</div>
+        <ul class="plan-features">
+          <li>بهترین انتخاب برای کاربران دائمی</li>
+          <li>بیشترین صرفه اقتصادی</li>
+          <li>یک سال استفاده بدون وقفه</li>
+        </ul>
+        <button class="buy-btn" onclick="handleBuy('premium_365d')">خرید اشتراک</button>
+      </div>
+    </div>
+
+    <div id="messageBox" class="message"></div>
+    <a class="back-link" href="profile.html">بازگشت به پروفایل</a>
+  </div>
+
+  <script src="dataStorage.js"></script>
+  <script>
+    function updatePremiumStatus() {
+      const box = document.getElementById("premiumStatusText");
+      const until = localStorage.getItem("premiumUntil");
+      if (until) {
+        const date = new Date(parseInt(until));
+        if (date > new Date()) {
+          box.textContent = "اشتراک شما فعال است تا تاریخ " + date.toLocaleDateString("fa-IR");
+          return;
+        }
+      }
+      box.textContent = "شما در حال حاضر اشتراک پریمیوم فعال ندارید.";
+    }
+
+    async function handleBuy(planId) {
+      const box = document.getElementById("messageBox");
+      const buttons = document.querySelectorAll(".buy-btn");
+
+      buttons.forEach(b => b.disabled = true);
+      box.className = "message";
+      box.style.display = "none";
+
+      try {
+        const result = await window.buyPremium(planId);
+
+        box.className = "message success";
+        box.textContent = "اشتراک با موفقیت فعال شد! 🎉";
+        box.style.display = "block";
+
+        updatePremiumStatus();
+
+      } catch (err) {
+        box.className = "message error";
+        box.textContent = err.message || "خطا در فعال‌سازی اشتراک";
+        box.style.display = "block";
+      } finally {
+        buttons.forEach(b => b.disabled = false);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (window.initUserData) await initUserData();
+
+      if (!window.isLoggedIn || !isLoggedIn()) {
+        window.location.href = "auth.html";
+        return;
+      }
+
+      updatePremiumStatus();
+    });
+  </script>
+</body>
+</html>

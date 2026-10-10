@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<script src="config.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود | ثبت نام</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+:root{
+--blue:#1cb0f6;
+--blue-dark:#1899d6;
+--green:#58cc02;
+--gray:#e5e5e5;
+--bg:#f7f7f7;
+}
+
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+margin:0;
+background:var(--bg);
+font-family:Tahoma;
+}
+
+.auth-box{
+background:white;
+padding:32px;
+border-radius:20px;
+border:2px solid var(--gray);
+width:100%;
+max-width:420px;
+box-sizing:border-box;
+}
+
+h2{
+text-align:center;
+margin-bottom:25px;
+}
+
+.tabs{
+display:flex;
+gap:10px;
+margin-bottom:25px;
+border-bottom:2px solid var(--gray);
+}
+
+.tab{
+flex:1;
+border:none;
+background:none;
+padding:12px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+color:#999;
+}
+
+.tab.active{
+color:var(--blue);
+border-bottom:3px solid var(--blue);
+margin-bottom:-2px;
+}
+
+input{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:2px solid var(--gray);
+background:#f7f7f7;
+margin-bottom:12px;
+font-size:14px;
+box-sizing:border-box;
+}
+
+input:focus{
+border-color:var(--blue);
+outline:none;
+}
+
+.btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+color:white;
+background:var(--blue);
+box-shadow:0 4px 0 var(--blue-dark);
+}
+
+.btn:active{
+transform:translateY(4px);
+box-shadow:0 0 0 var(--blue-dark);
+}
+
+.btn-green{
+background:var(--green);
+box-shadow:0 4px 0 #46a302;
+}
+
+.error{
+color:#e74c3c;
+font-size:13px;
+text-align:center;
+min-height:18px;
+margin-top:6px;
+}
+
+#otp-area{
+margin-top:15px;
+border-top:1px dashed var(--gray);
+padding-top:15px;
+}
+
+.countdown{
+text-align:center;
+font-size:12px;
+color:#888;
+margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-box">
+
+<h2>خوش آمدید</h2>
+
+<div class="tabs">
+<button class="tab active" id="tab-login">ورود</button>
+<button class="tab" id="tab-register">ثبت نام</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login-box">
+
+<input id="login-username" placeholder="نام کاربری">
+<input id="login-password" type="password" placeholder="رمز عبور">
+
+<button class="btn" id="login-btn">ورود</button>
+
+<div id="login-error" class="error"></div>
+
+</div>
+
+<!-- REGISTER -->
+<div id="register-box" style="display:none">
+
+<input id="name" placeholder="نام و نام خانوادگی">
+<input id="username" placeholder="نام کاربری">
+<input id="mobile" placeholder="شماره موبایل (09...)">
+<input id="password" type="password" placeholder="رمز عبور">
+
+<button class="btn" id="send-code">ارسال کد تایید</button>
+
+<div id="register-error" class="error"></div>
+
+<div id="otp-area" style="display:none">
+
+<div id="countdown" class="countdown"></div>
+
+<input id="otp-input" maxlength="4" placeholder="کد ۴ رقمی" style="text-align:center;letter-spacing:6px">
+
+<button class="btn btn-green" id="verify-btn">تایید نهایی</button>
+
+<div id="verify-error" class="error"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="dataStorage.js"></script>
+
+<script>
+
+const $=id=>document.getElementById(id)
+
+let otpCode=null
+let otpExpire=0
+let timer=null
+
+/* TAB SWITCH */
+
+$("tab-login").onclick=()=>{
+$("login-box").style.display="block"
+$("register-box").style.display="none"
+$("tab-login").classList.add("active")
+$("tab-register").classList.remove("active")
+}
+
+$("tab-register").onclick=()=>{
+$("login-box").style.display="none"
+$("register-box").style.display="block"
+$("tab-register").classList.add("active")
+$("tab-login").classList.remove("active")
+}
+
+/* LOGIN */
+
+$("login-btn").onclick=async()=>{
+
+$("login-error").textContent=""
+
+const user=$("login-username").value.trim()
+const pass=$("login-password").value.trim()
+
+if(!user||!pass){
+$("login-error").textContent="فیلدها را پر کنید"
+return
+}
+
+try{
+
+await loginUser(user,pass)
+
+window.location.href="home.html"
+
+}catch(err){
+
+$("login-error").textContent=err.message
+
+}
+
+}
+
+/* SEND OTP */
+
+$("send-code").onclick=()=>{
+
+$("register-error").textContent=""
+
+const name=$("name").value.trim()
+const user=$("username").value.trim()
+const mob=$("mobile").value.trim()
+const pass=$("password").value.trim()
+
+if(!name||!user||!mob||!pass){
+$("register-error").textContent="تمام فیلدها الزامی است"
+return
+}
+
+if(!/^09\d{9}$/.test(mob)){
+$("register-error").textContent="شماره موبایل معتبر نیست"
+return
+}
+
+if(pass.length<6){
+$("register-error").textContent="رمز باید حداقل ۶ کاراکتر باشد"
+return
+}
+
+otpCode=String(Math.floor(1000+Math.random()*9000))
+otpExpire=Date.now()+120000
+
+alert("کد تستی شما: "+otpCode)
+
+$("otp-area").style.display="block"
+
+startTimer()
+
+}
+
+/* TIMER */
+
+function startTimer(){
+
+clearInterval(timer)
+
+timer=setInterval(()=>{
+
+const remain=Math.ceil((otpExpire-Date.now())/1000)
+
+if(remain<=0){
+
+clearInterval(timer)
+$("countdown").textContent="کد منقضی شد"
+otpCode=null
+return
+
+}
+
+$("countdown").textContent="زمان باقی مانده: "+remain+" ثانیه"
+
+},1000)
+
+}
+
+/* VERIFY + REGISTER */
+
+$("verify-btn").onclick=async()=>{
+
+$("verify-error").textContent=""
+
+if(!otpCode||$("otp-input").value!==otpCode){
+
+$("verify-error").textContent="کد اشتباه است"
+return
+
+}
+
+try{
+
+await registerUser({
+
+name:$("name").value.trim(),
+username:$("username").value.trim(),
+mobile:$("mobile").value.trim(),
+password:$("password").value.trim()
+
+})
+
+window.location.href="home.html"
+
+}catch(err){
+
+$("verify-error").textContent=err.message
+
+}
+
+}
+
+/* INIT */
+
+document.addEventListener("DOMContentLoaded",async()=>{
+
+if(window.initUserData) await initUserData()
+
+if(window.isLoggedIn && isLoggedIn()){
+window.location.href="home.html"
+}
+
+})
+
+</script>
+
+</body>
+</html>

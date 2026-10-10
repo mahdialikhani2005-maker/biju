@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <script src="../../config.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>درس‌ها - انگلیسی</title>
+    <link rel="stylesheet" href="../../style.css" />
+    <style>
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            z-index: 150;
+        }
+        .bottom-nav-inner {
+            direction: ltr;
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            background: white;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+            padding: 10px 0;
+            box-sizing: border-box;
+        }
+        .bottom-nav .nav-item { opacity: 0.45; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav .nav-item.active { opacity: 1; }
+        .bottom-nav .nav-item img { width: 26px; height: 26px; }
+        .bottom-nav .nav-item .nav-icon-emoji { font-size: 22px; }
+        body { padding-bottom: 64px; }
+    </style>
+</head>
+
+<body>
+
+<a href="../../home.html" style="position:fixed; top:16px; right:16px; z-index:200; background:white; border-radius:50%; width:44px; height:44px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15); text-decoration:none; font-size:22px;">🏠</a>
+
+<script src="../../main.js"></script>
+
+<header class="progress-header">
+  <div class="hearts-box">
+    ❤️ <span id="heart-count">-</span>
+  </div>
+  <div class="xp-box">
+    ⭐ <span id="total-xp">-</span> XP
+  </div>
+</header>
+
+<header class="level-header">
+  <div class="level-header-inner">
+    <button id="levelBtn" class="level-btn">
+      مقدماتی یک (A1) ⌄
+    </button>
+    <div id="levelMenu" class="level-menu">
+      <a href="index.html">مقدماتی یک (A1)</a>
+      <a href="A2/index.html">مقدماتی دو (A2)</a>
+      <a href="b1.html">متوسط یک (B1)</a>
+      <a href="b2.html">متوسط دو (B2)</a>
+      <a href="c1.html">پیشرفته یک (C1)</a>
+      <a href="c2.html">پیشرفته دو (C2)</a>
+    </div>
+  </div>
+</header>
+
+<h2 class="title">درس‌های انگلیسی</h2>
+
+<div class="lessons-grid">
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson1" class="lesson-btn">درس ۱</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson2" class="lesson-btn">درس ۲</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson3" class="lesson-btn">درس ۳</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson4" class="lesson-btn">درس ۴</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson5" class="lesson-btn">درس ۵</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson6" class="lesson-btn">درس ۶</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson7" class="lesson-btn">درس ۷</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson8" class="lesson-btn">درس ۸</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson9" class="lesson-btn">درس ۹</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson10" class="lesson-btn">درس ۱۰</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson11" class="lesson-btn">درس ۱۱</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson12" class="lesson-btn">درس ۱۲</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson13" class="lesson-btn">درس ۱۳</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson14" class="lesson-btn">درس ۱۴</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson15" class="lesson-btn">درس ۱۵</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson16" class="lesson-btn">درس ۱۶</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson17" class="lesson-btn">درس ۱۷</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson18" class="lesson-btn">درس ۱۸</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson19" class="lesson-btn">درس ۱۹</a>
+    <a href="http://127.0.0.1:8000/lessons/english/lessons/intro.html?lesson=en-lesson20" class="lesson-btn">درس ۲۰</a>
+</div>
+
+<footer class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="#" id="nav-lesson" class="nav-item active">
+      <img src="/assets/icons/lesson.png" alt="درس">
+    </a>
+    <a href="#" id="nav-review" class="nav-item">
+      <span class="nav-icon-emoji">🔁</span>
+    </a>
+    <a href="#" id="nav-progress" class="nav-item">
+      <img src="/assets/icons/progress.png" alt="پیشرفت">
+    </a>
+    <a href="#" id="nav-profile" class="nav-item">
+      <img src="/assets/icons/profile.png" alt="پروفایل">
+    </a>
+  </div>
+</footer>
+
+<script src="../dataStorage.js"></script>
+<script type="module" src="../courseRouter.js"></script>
+
+<script>
+window.onload = async function() {
+    await initUserData();
+    updateStatsUI();
+
+    setInterval(async () => {
+        await refreshUserStats();
+        updateStatsUI();
+    }, 30000);
+};
+
+function updateStatsUI() {
+    const heartDisplay = document.getElementById("heart-count");
+    const xpDisplay = document.getElementById("total-xp");
+    if (heartDisplay) heartDisplay.textContent = getHearts();
+    if (xpDisplay) xpDisplay.textContent = getTotalXP();
+}
+</script>
+
+<div id="global-loader" class="global-loader hidden">
+  <div class="global-loader-box">
+    <div class="duo-spinner"></div>
+    <p id="global-loader-text">در حال بارگذاری...</p>
+  </div>
+</div>
+
+</body>
+</html>

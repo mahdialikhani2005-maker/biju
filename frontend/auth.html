@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<script src="config.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ثبت‌نام | ورود</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --duo-blue: #1cb0f6;
+      --duo-blue-dark: #1899d6;
+      --duo-green: #58cc02;
+      --duo-green-dark: #46a302;
+      --duo-gray: #e5e5e5;
+      --duo-text: #4b4b4b;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f7f7f7;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      color: var(--duo-text);
+    }
+
+    .card {
+      background: #fff;
+      padding: 32px;
+      border-radius: 20px;
+      border: 2px solid var(--duo-gray);
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h2, h3 {
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: #3c3c3c;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 2px solid var(--duo-gray);
+      border-radius: 16px;
+      background: #f7f7f7;
+      font-size: 15px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--duo-blue);
+    }
+
+    .btn-blue {
+      width: 100%;
+      background: var(--duo-blue);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--duo-blue-dark);
+      margin-top: 10px;
+      transition: all 0.1s;
+      position: relative;
+    }
+
+    .btn-blue:active {
+      box-shadow: 0 0 0 var(--duo-blue-dark);
+      transform: translateY(4px);
+    }
+
+    .btn-green {
+      width: 100%;
+      background: var(--duo-green);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--duo-green-dark);
+      margin-top: 10px;
+      transition: all 0.1s;
+    }
+
+    .btn-green:active {
+      box-shadow: 0 0 0 var(--duo-green-dark);
+      transform: translateY(4px);
+    }
+
+    .error-msg {
+      color: #ee5253;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+
+    #countdown {
+      font-size: 13px;
+      color: #afafaf;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    #otp-display {
+      background: #e1f5fe;
+      padding: 10px;
+      border-radius: 12px;
+      color: var(--duo-blue-dark);
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .switch-link {
+      display: block;
+      margin-top: 16px;
+      color: var(--duo-blue);
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .switch-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <h2>خوش آمدید!</h2>
+
+  <!-- مرحله اول: ثبت‌نام -->
+  <div id="register-step">
+    <h3 style="color: var(--duo-blue);">ساخت حساب کاربری</h3>
+    <input type="text" id="name" placeholder="نام و نام‌خانوادگی" />
+    <input type="text" id="username" placeholder="نام کاربری (انگلیسی)" />
+    <input type="tel" id="mobile" placeholder="شماره موبایل (مثلاً 0912...)" />
+    <input type="password" id="password" placeholder="رمز عبور" />
+    <button class="btn-blue" type="button" onclick="sendMockSms()">ارسال کد تایید</button>
+    <div id="register-error" class="error-msg"></div>
+    <a class="switch-link" onclick="showLogin()">قبلاً ثبت‌نام کرده‌اید؟ وارد شوید</a>
+  </div>
+
+  <!-- مرحله دوم: تایید OTP -->
+  <div id="verify-step" style="display:none;">
+    <h3 style="color: var(--duo-green);">تایید هویت</h3>
+    <div id="otp-display">کد تایید پیامک شد</div>
+    <div id="countdown"></div>
+    <input type="text" id="otp-input" placeholder="کد ۴ رقمی" maxlength="4" style="text-align:center; letter-spacing: 10px; font-weight: bold; font-size: 20px;" />
+    <button id="verify-code-btn" class="btn-green" type="button" onclick="verifyCode()">تایید و ورود</button>
+    <div id="verify-error" class="error-msg"></div>
+    <div id="verify-success" style="color:var(--duo-green); font-weight:bold; margin-top:10px;"></div>
+  </div>
+
+  <!-- مرحله سوم: ورود کاربرانی که قبلاً ثبت‌نام کردن -->
+  <div id="login-step" style="display:none;">
+    <h3 style="color: var(--duo-blue);">ورود به حساب کاربری</h3>
+    <input type="text" id="login-username" placeholder="نام کاربری" />
+    <input type="password" id="login-password" placeholder="رمز عبور" />
+    <button class="btn-blue" type="button" onclick="handleLogin()">ورود</button>
+    <div id="login-error" class="error-msg"></div>
+    <a class="switch-link" onclick="showRegister()">حساب ندارید؟ ثبت‌نام کنید</a>
+  </div>
+
+</div>
+
+<script src="dataStorage.js"></script>
+
+<script>
+let generatedCode = null;
+let countdownTimer = null;
+let codeExpiresAt = 0;
+
+const $ = (id) => document.getElementById(id);
+
+function getValue(id) {
+  return $(id)?.value.trim() || "";
+}
+
+function showError(id, msg) {
+  $(id).textContent = msg;
+}
+
+function clearMessages() {
+  ["register-error","verify-error","verify-success","login-error"].forEach(id=>{
+    if($(id)) $(id).textContent="";
+  });
+}
+
+function showLogin() {
+  clearMessages();
+  $("register-step").style.display = "none";
+  $("verify-step").style.display = "none";
+  $("login-step").style.display = "block";
+}
+
+function showRegister() {
+  clearMessages();
+  $("login-step").style.display = "none";
+  $("verify-step").style.display = "none";
+  $("register-step").style.display = "block";
+}
+
+async function handleLogin() {
+  clearMessages();
+
+  const username = getValue("login-username");
+  const password = getValue("login-password");
+
+  if (!username || !password) {
+    showError("login-error", "نام کاربری و رمز عبور را وارد کنید.");
+    return;
+  }
+
+  const btn = document.querySelector("#login-step .btn-blue");
+  btn.disabled = true;
+
+  try {
+    await loginUser(username, password);
+    window.location.href = "home.html";
+  } catch (err) {
+    showError("login-error", err.message || "نام کاربری یا رمز عبور اشتباه است.");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function validateRegisterForm() {
+  const name = getValue("name");
+  const username = getValue("username");
+  const mobile = getValue("mobile");
+  const password = getValue("password");
+
+  if (!name) return "لطفاً نام خود را وارد کنید.";
+  if (!username) return "نام کاربری الزامی است.";
+  if (!/^09\d{9}$/.test(mobile)) return "شماره موبایل اشتباه است.";
+  if (!password || password.length < 6) return "رمز عبور باید حداقل ۶ رقم باشد.";
+  return "";
+}
+
+function updateCountdown() {
+  const remaining = codeExpiresAt - Date.now();
+  if (remaining <= 0) {
+    clearInterval(countdownTimer);
+    generatedCode = null;
+    $("countdown").textContent = "زمان شما تمام شد!";
+    $("verify-code-btn").disabled = true;
+    $("verify-code-btn").style.opacity = "0.5";
+    return;
+  }
+  $("countdown").textContent = "اعتبار کد تا: " + Math.ceil(remaining/1000) + " ثانیه";
+}
+
+function sendMockSms() {
+  clearMessages();
+
+  const error = validateRegisterForm();
+  if (error) {
+    showError("register-error", error);
+    return;
+  }
+
+  generatedCode = String(Math.floor(1000 + Math.random() * 9000));
+  codeExpiresAt = Date.now() + 120000;
+
+  $("register-step").style.display = "none";
+  $("verify-step").style.display = "block";
+  $("verify-code-btn").disabled = false;
+  $("verify-code-btn").style.opacity = "1";
+
+  alert("کد تایید شما: " + generatedCode);
+
+  updateCountdown();
+  clearInterval(countdownTimer);
+  countdownTimer = setInterval(updateCountdown, 1000);
+}
+
+async function verifyCode() {
+  clearMessages();
+  const enteredCode = getValue("otp-input");
+
+  if (!generatedCode) {
+    showError("verify-error","کد جدید دریافت کنید.");
+    return;
+  }
+
+  if (enteredCode !== generatedCode) {
+    showError("verify-error","کد اشتباه است.");
+    return;
+  }
+
+  try {
+    await registerUser({
+      name: getValue("name"),
+      username: getValue("username"),
+      phone: getValue("mobile"),
+      password: getValue("password")
+    });
+
+    $("verify-success").textContent = "خوش آمدید! در حال انتقال...";
+
+    setTimeout(() => {
+      window.location.href = "home.html";
+    }, 1000);
+
+  } catch (err) {
+    showError("verify-error", err.message || "خطا در ثبت‌نام. احتمالاً نام کاربری تکراری است.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (window.initUserData) await initUserData();
+  if (window.isLoggedIn && isLoggedIn()) {
+    window.location.href = "home.html";
+  }
+});
+</script>
+
+</body>
+</html>
